@@ -8,6 +8,7 @@ import 'package:task_manager_assignment/data/models/user_model.dart';
 import 'package:task_manager_assignment/data/network_caller/network_caller.dart';
 import 'package:task_manager_assignment/data/utilities/urls.dart';
 import 'package:task_manager_assignment/ui/controllers/auth_controller.dart';
+import 'package:task_manager_assignment/ui/screens/main_bottom_nav_screen.dart';
 import 'package:task_manager_assignment/ui/widgets/background_widget.dart';
 import 'package:task_manager_assignment/ui/widgets/centered_progress_indicator.dart';
 import 'package:task_manager_assignment/ui/widgets/profile_app_bar.dart';
@@ -141,6 +142,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       await AuthController.saveUserData(userModel);
       if (mounted) {
         showSnackBarMessage(context, 'Profile updated!');
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainBottomNavScreen(),
+          ),
+        );
       }
     } else {
       if (mounted) {
