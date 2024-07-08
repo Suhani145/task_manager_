@@ -1,16 +1,14 @@
-
 import 'package:flutter/material.dart';
 import 'package:task_manager_assignment/data/models/network_response.dart';
 import 'package:task_manager_assignment/data/network_caller/network_caller.dart';
 import 'package:task_manager_assignment/data/utilities/urls.dart';
+import 'package:task_manager_assignment/ui/widgets/add_new_profile_app_bar.dart';
 import 'package:task_manager_assignment/ui/widgets/background_widget.dart';
-import 'package:task_manager_assignment/ui/widgets/profile_app_bar.dart';
 import 'package:task_manager_assignment/ui/widgets/snack_bar_message.dart';
 import '../widgets/centered_progress_indicator.dart';
 
 class AddNewTaskScreen extends StatefulWidget {
   const AddNewTaskScreen({super.key});
-
   @override
   State<AddNewTaskScreen> createState() => _AddNewTaskScreenState();
 }
@@ -25,7 +23,7 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: profileAppBar(context),
+      appBar: addNewProfileAppBar(context),
       body: BackgroundWidget(
         child: SingleChildScrollView(
           child: Padding(
@@ -80,7 +78,6 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       ),
     );
   }
-
   Future<void> _addNewTasK() async {
 
     _addNewTaskInProgress = true;//loader on
@@ -93,7 +90,6 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
       "description": _descriptionTEController.text.trim(),
       "status": "New"
     };
-
     NetworkResponse response =
     await NetworkCaller.postRequest(Urls.createTask, body: requestData);
 
@@ -114,7 +110,6 @@ class _AddNewTaskScreenState extends State<AddNewTaskScreen> {
     }
 
   }
-
   void _clearTextFields() {
     _titleTEController.clear();
     _descriptionTEController.clear();

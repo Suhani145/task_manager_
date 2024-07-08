@@ -5,7 +5,6 @@ import 'package:task_manager_assignment/data/network_caller/network_caller.dart'
 import 'package:task_manager_assignment/data/utilities/urls.dart';
 import 'package:task_manager_assignment/ui/widgets/centered_progress_indicator.dart';
 import 'package:task_manager_assignment/ui/widgets/snack_bar_message.dart';
-
 class TaskItem extends StatefulWidget {
   const TaskItem({
     super.key,
@@ -80,11 +79,15 @@ class _TaskItemState extends State<TaskItem> {
                       replacement: const CenterProgressIndicator(),
                       child: PopupMenuButton<String>(
                         icon: const Icon(Icons.edit),
-                        onSelected: (String selectedValue) {
-                          dropdownValue = selectedValue;
-                          if (mounted) {
-                            setState(() {});
-                          }
+                        onSelected: (String selectedValue) async {
+                          setState(() {
+                            _editInProgress = true;
+                          });
+                          await _updateTaskStatus(selectedValue);
+                          setState(() {
+                            _editInProgress = false;
+                            dropdownValue = selectedValue;
+                          });
                         },
                         itemBuilder: (BuildContext context) {
                           return statusList.map((String value) {
@@ -132,6 +135,33 @@ class _TaskItemState extends State<TaskItem> {
     _deleteInProgress = false;
     if (mounted) {
       setState(() {});
+    }
+  }
+
+  Future<void> _updateTaskStatus(String newStatus) async {
+    String url = '';
+    switch (newStatus) {
+      case 'Progress':
+        url = Urls.progressStatus(widget.taskModel.sId!);
+        break;
+      case 'Completed':
+        url = Urls.completedStatus(widget.taskModel.sId!);
+        break;
+      case 'Cancelled':
+        url = Urls.cancelledStatus(widget.taskModel.sId!);
+        break;
+      default:
+        return;
+    }
+
+    NetworkResponse response = await NetworkCaller.getRequest(url);
+    if (response.isSuccess) {
+      widget.onUpdateTask();
+    } else {
+      if (mounted) {
+        showSnackBarMessage(context,
+            response.errorMessage ?? 'Update task status failed! Try again');
+      }
     }
   }
 }

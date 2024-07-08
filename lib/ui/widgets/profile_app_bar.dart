@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:task_manager_assignment/ui/controllers/auth_controller.dart';
 import 'package:task_manager_assignment/ui/screens/auth/sign_in_screen.dart';
@@ -71,7 +69,7 @@ AppBar profileAppBar(context, [bool fromUpdateProfile = false]) {
                 (route) => false,
           );
         },
-        icon: const Icon(Icons.logout),
+        icon: const Icon(Icons.logout, color: Colors.white),
       )
     ],
   );
