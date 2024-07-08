@@ -3,6 +3,7 @@ import 'package:task_manager_assignment/data/models/task_by_status_count_wrapper
 import 'package:task_manager_assignment/data/models/task_count_by_status_model.dart';
 import 'package:task_manager_assignment/ui/screens/add_new_task_screen.dart';
 import 'package:task_manager_assignment/ui/utility/app_colors.dart';
+import 'package:task_manager_assignment/ui/widgets/background_widget.dart';
 import 'package:task_manager_assignment/ui/widgets/centered_progress_indicator.dart';
 import '../../data/models/network_response.dart';
 import '../../data/models/task_list_wrapper_model.dart';
@@ -36,38 +37,40 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
-        child: Column(
-          children: [
-            buildSummarySelection(),
-            const SizedBox(
-              height: 8,
-            ),
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  _getNewTasks();
-                  _getTaskCountByStatus();
-                },
-                child: Visibility(
-                  visible: _getNewTasksInProgress == false,
-                  replacement: const CenterProgressIndicator(),
-                  child: ListView.builder(
-                      itemCount: newTaskList.length,
-                      itemBuilder: (context, index) {
-                        return TaskItem(
-                          taskModel: newTaskList[index],
-                          onUpdateTask: (){
-                            _getNewTasks();
-                            _getTaskCountByStatus();
-                          },
-                        );
-                      }),
-                ),
+      body: BackgroundWidget(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
+          child: Column(
+            children: [
+              buildSummarySelection(),
+              const SizedBox(
+                height: 8,
               ),
-            )
-          ],
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: () async {
+                    _getNewTasks();
+                    _getTaskCountByStatus();
+                  },
+                  child: Visibility(
+                    visible: _getNewTasksInProgress == false,
+                    replacement: const CenterProgressIndicator(),
+                    child: ListView.builder(
+                        itemCount: newTaskList.length,
+                        itemBuilder: (context, index) {
+                          return TaskItem(
+                            taskModel: newTaskList[index],
+                            onUpdateTask: (){
+                              _getNewTasks();
+                              _getTaskCountByStatus();
+                            },
+                          );
+                        }),
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

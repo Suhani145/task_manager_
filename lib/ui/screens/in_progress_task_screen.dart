@@ -4,6 +4,7 @@ import 'package:task_manager_assignment/data/models/task_list_wrapper_model.dart
 import 'package:task_manager_assignment/data/models/task_model.dart';
 import 'package:task_manager_assignment/data/network_caller/network_caller.dart';
 import 'package:task_manager_assignment/data/utilities/urls.dart';
+import 'package:task_manager_assignment/ui/widgets/background_widget.dart';
 import 'package:task_manager_assignment/ui/widgets/centered_progress_indicator.dart';
 import 'package:task_manager_assignment/ui/widgets/snack_bar_message.dart';
 import 'package:task_manager_assignment/ui/widgets/task_item.dart';
@@ -26,21 +27,23 @@ class _InProgressTaskScreenState extends State<InProgressTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: () async => _getInProgressTasks(),
-        child: Visibility(
-          visible: _getInProgressTasksInProgress == false,
-          replacement: const CenterProgressIndicator(),
-          child: ListView.builder(
-            itemCount: inProgressTasks.length,
-            itemBuilder: (context, index) {
-              return TaskItem(
-                taskModel: inProgressTasks[index],
-                onUpdateTask: () {
-                  _getInProgressTasks();
-                },
-              );
-            },
+      body: BackgroundWidget(
+        child: RefreshIndicator(
+          onRefresh: () async => _getInProgressTasks(),
+          child: Visibility(
+            visible: _getInProgressTasksInProgress == false,
+            replacement: const CenterProgressIndicator(),
+            child: ListView.builder(
+              itemCount: inProgressTasks.length,
+              itemBuilder: (context, index) {
+                return TaskItem(
+                  taskModel: inProgressTasks[index],
+                  onUpdateTask: () {
+                    _getInProgressTasks();
+                  },
+                );
+              },
+            ),
           ),
         ),
       ),
